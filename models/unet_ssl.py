@@ -117,3 +117,27 @@ class UNet1D_Light(nn.Module):
         x1, x2, x3, x4, x5 = self.encode(x)
         logits = self.decode(x1, x2, x3, x4, x5)
         return logits, x5  # x5 — bottleneck
+    
+class UNet1DEncoder(nn.Module):
+    """
+    Обёртка над encoder-частью обученного U-Net.
+    На вход:  x ∈ R^{B×C×L}
+    На выход: bottleneck-фичи x5 ∈ R^{B×C_bottleneck×L_reduced}
+    """
+    def __init__(self, unet_model: nn.Module):
+        super().__init__()
+        # просто переиспользуем уже обученные блоки
+        self.inc = unet_model.inc
+        self.down1 = unet_model.down1
+        self.down2 = unet_model.down2
+        self.down3 = unet_model.down3
+        self.down4 = unet_model.down4
+
+    def forward(self, x):
+        # это ровно то, что делал encode() в полном U-Net
+        x1 = self.inc(x)    # (B, ch1, L)
+        x2 = self.down1(x1) # (B, ch2, L/2)
+        x3 = self.down2(x2) # (B, ch3, L/4)
+        x4 = self.down3(x3) # (B, ch4, L/8)
+        x5 = self.down4(x4) # (B, bottleneck_ch, L/16)
+        return x5
