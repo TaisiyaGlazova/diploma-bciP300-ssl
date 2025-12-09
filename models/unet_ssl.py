@@ -141,3 +141,21 @@ class UNet1DEncoder(nn.Module):
         x4 = self.down3(x3) # (B, ch4, L/8)
         x5 = self.down4(x4) # (B, bottleneck_ch, L/16)
         return x5
+    
+class UNet1DEncoderX3(nn.Module):
+    """
+    Encoder, который берёт признаки с уровня x3 (до убийства сигнала в down3/down4).
+    """
+    def __init__(self, unet_model: nn.Module):
+        super().__init__()
+        self.inc = unet_model.inc
+        self.down1 = unet_model.down1
+        self.down2 = unet_model.down2
+        self.down3 = unet_model.down3  # до этого уровня оставляем
+
+    def forward(self, x):
+        x1 = self.inc(x)
+        x2 = self.down1(x1)
+        x3 = self.down2(x2)
+        x4 = self.down3(x3)   # x4 нам не нужен, важно x3
+        return x3             # (B, ch3, L3) — живой уровень
