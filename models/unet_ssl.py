@@ -151,11 +151,11 @@ class UNet1DEncoderX3(nn.Module):
         self.inc = unet_model.inc
         self.down1 = unet_model.down1
         self.down2 = unet_model.down2
-        self.down3 = unet_model.down3  # до этого уровня оставляем
+        self.down3 = unet_model.down3  
 
     def forward(self, x):
         x1 = self.inc(x)
         x2 = self.down1(x1)
         x3 = self.down2(x2)
-        x4 = self.down3(x3)   # x4 нам не нужен, важно x3
+        x4 = self.down3(x3)   
         return x3             # (B, ch3, L3) — живой уровень
