@@ -1,0 +1,6 @@
+strategy,0,10,20,40,60,100
+full_ft,1,1,1,1,1,1
+low_lr_encoder,1,1,1,1,1,1
+partial_ft,1,1,1,1,1,1
+scratch,1,1,1,1,1,1
+warmup,1,1,1,1,1,1

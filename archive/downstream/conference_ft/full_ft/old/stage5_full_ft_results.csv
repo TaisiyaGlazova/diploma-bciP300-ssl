@@ -1,0 +1,11 @@
+p,scratch_auc,ssl_auc,subject
+10,0.544013,0.536373,subjA_dev
+20,0.53993,0.539036,subjA_dev
+40,0.563393,0.556053,subjA_dev
+60,0.571868,0.559815,subjA_dev
+100,0.603185,0.650841,subjA_dev
+10,0.539088,0.528688,subjB_test
+20,0.570544,0.546641,subjB_test
+40,0.579975,0.594487,subjB_test
+60,0.590495,0.653456,subjB_test
+100,0.721096,0.763013,subjB_test

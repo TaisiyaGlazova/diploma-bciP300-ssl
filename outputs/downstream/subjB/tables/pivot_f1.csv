@@ -1,0 +1,7 @@
+p,full_ft,low_lr_encoder,partial_ft,scratch,warmup
+0,0.2855 ± nan,0.2855 ± nan,0.2855 ± nan,0.0000 ± nan,0.2855 ± nan
+10,0.2855 ± nan,0.2855 ± nan,0.2857 ± nan,0.2810 ± nan,0.2819 ± nan
+20,0.2867 ± nan,0.2856 ± nan,0.2855 ± nan,0.2855 ± nan,0.2860 ± nan
+40,0.2852 ± nan,0.2855 ± nan,0.2855 ± nan,0.2892 ± nan,0.2855 ± nan
+60,0.2962 ± nan,0.2863 ± nan,0.2922 ± nan,0.2874 ± nan,0.2863 ± nan
+100,0.3683 ± nan,0.2853 ± nan,0.2914 ± nan,0.2862 ± nan,0.2889 ± nan

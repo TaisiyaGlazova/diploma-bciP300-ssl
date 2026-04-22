@@ -1,23 +1,153 @@
 # Применение SSL-методов  машинного обучения  для классификации стимулов в ИМК-P300
+Репозиторий содержит код для ВКР по применению SSL-методов к ЭЭГ-записям в ИМК-Р300 для классификации целевых и нецелевых стимулов.
 
-Этот репозиторий содержит код для ВКР по применению SSL-методов к ЭЭГ-записям в ИМК-Р300 для классификации целевых и нецелевых стимулов.
+## Цель работы
+
+> Разработать SSL-подход машинного обучения для сокращения объёма индивидуальной калибровки в задаче классификации целевых и нецелевых событий в ИМК-Р300.
+
+---
 
 ## Структура репозитория
 
-```text
-BigP300BCI_ssl_sample.ipynb - ноутбук с исследованием данных датасета BigP300BCI и сборкой SSL-выборки (большой нерабочей и маленькой рабочей)
+- `notebooks/` — ноутбуки с экспериментами, анализом и визуализациями
+    - `preprocessing/` — подготовка и анализ датасетов
+    - `ssl/` — self-supervised обучение
+    - `downstream/` — scratch и fine-tuning эксперименты
+    - `analysis/` — финальный анализ и графики
+    - `archive/` — черновые и неактуальные ноутбуки
 
-SSL_reconstruction_50k_colab.ipynb - ноутбук с полным пайплайном SSL модели в reconstruction-задаче для маленькой выборки (50к)
+- `src/` — переиспользуемый код
+    - `downstream/` — downstream-код и модели
 
-linear_eval_sslreconstrucrion_50k.ipynb - ноутбук с Linear evaluation для SSL модели в reconstruction-задаче для маленькой выборки (50к)
+- `data/` — данные 
+    - `raw/` — исходные датасеты
+    - `processed/` — подготовленные данные (epochs, splits, stats, SSL dataset)
 
-SSL_masking-reconstruction_50k_colab.ipynb - - ноутбук с полным пайплайном SSL модели в masking-reconstruction-задаче для маленькой выборки (50к)
+- `outputs/` — результаты экспериментов
 
-linear_eval_ssl20epoch_maskingreconstrucrion_50k.ipynb - ноутбук с Linear evaluation для SSL Недообученной модели (20 эпох) в masking-reconstruction-задаче для маленькой выборки (50к)
+  - `downstream/` — таблицы и графики
+  - `ssl/` — чекпоинты, логи, реконструкции
 
-linear_eval_ssl200epoch_maskingreconstrucrion_50k.ipynb- ноутбук с Linear evaluation для SSL Дообученной модели (200 эпох) в masking-reconstruction-задаче для маленькой выборки (50к)
+- `reports/` — материалы для диплома и презентации
 
+- `docs/` — описание методики, этапов экспериментов и пайплайна
+---
 
+## Датасеты
 
-models:
-unet_ssl.py - UNet модель
+Используются два набора данных:
+
+* **BigP3BCI (PhysioNet)**
+
+  * SSL-предобучение
+  * основной downstream эксперимент (межсубъектная оценка)
+
+* **BCI Competition III Dataset II**
+
+  * дополнительная независимая проверка результатов
+
+---
+
+## Подготовка данных
+
+Выполнено:
+
+* анализ структуры BigP3BCI
+* формирование SSL-выборки
+* формирование downstream-выборок
+* препроцессинг EEG:
+
+  * фильтрация (0.1–20 Hz)
+  * эпохирование (0–800 ms)
+  * ресемплинг до 256 Hz
+  * нормализация
+* построение nested calibration splits
+
+Подробности: `data/README.md`
+
+---
+
+## SSL Pretraining
+
+Реализовано self-supervised предобучение на BigP3BCI с pretext-задачей **masked reconstruction**.
+
+Сохранены:
+- encoder checkpoints
+- full model checkpoints
+- loss history
+- reconstruction examples
+
+Подробности:
+`docs/ssl_pretraining.md`
+
+---
+
+## Downstream Fine-Tuning
+
+Проводится сравнение:
+
+* Scratch (обучение с нуля)
+* SSL + Fine-tuning
+
+Рассматриваются стратегии:
+
+* full_ft
+* low_lr_encoder
+* partial_ft
+* warmup
+
+Основной протокол:
+
+* межсубъектная оценка (BigP3BCI)
+* calibration p ∈ {10, 20, 40, 60, 100}
+* per-subject нормализация без утечек
+
+Подробности:
+`docs/downstream_finetuning.md`
+
+---
+
+## Основные результаты
+
+* SSL улучшает качество при достаточном объёме калибровки
+* при p ≥ 60 стратегия full_ft даёт наилучшие результаты
+* при p = 100 для стратегии full_ft наблюдается статистически значимое улучшение относительно scratch
+* возможно снижение объёма калибровки примерно на **30%** без существенной потери качества: качество классификации full_ft (p = 40) сравнимо с scratch (p = 60)
+
+## Как воспроизвести
+
+ Подготовить данные
+   → `notebooks/preprocessing/`
+
+2. Запустить SSL-предобучение
+   → `notebooks/ssl/ssl_pretraining.ipynb`
+
+3. Запустить downstream эксперименты
+   → `notebooks/downstream/`
+
+4. Выполнить анализ результатов
+   → `notebooks/analysis/`
+
+---
+
+## Статус проекта
+
+✔ preprocessing
+
+✔ SSL pretraining
+
+✔ downstream full fine-tuning
+
+✔ анализ результатов full fine-tuning
+
+[ ] SSL checkpoint transfer analysis  
+
+[ ] Scratch на 7 и на 3 каналах  
+ 
+[ ] Переобучение моделей на 7 и 3 каналах (под вопросом) 
+
+[ ] Downstream с усреднением эпох 
+
+[ ] Supervised pre-fine-tuning + короткая персональная адаптация  
+
+[ ] Использование SOTA-классификационной головы  
