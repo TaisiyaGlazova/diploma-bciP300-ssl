@@ -12,12 +12,12 @@ __pycache__/
 .ipynb_checkpoints/
 
 # ========================
-# Data (важно!)
+# Data 
 # ========================
 data/raw/
 data/processed/
 
-# если вдруг используешь zarr отдельно
+# zarr
 *.zarr
 *.zarr.zip
 
@@ -37,7 +37,6 @@ data/processed/
 # ========================
 outputs/tmp/
 
-# если не хочешь хранить все результаты:
 # outputs/
 
 # ========================

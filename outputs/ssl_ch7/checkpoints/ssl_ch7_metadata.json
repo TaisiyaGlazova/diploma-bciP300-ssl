@@ -1,0 +1,38 @@
+{
+  "experiment": "ssl_ch7_masked_reconstruction",
+  "channel_set_name": "ch7",
+  "channel_names": [
+    "Cz",
+    "Pz",
+    "Oz",
+    "P3",
+    "P4",
+    "PO7",
+    "PO8"
+  ],
+  "channel_idx": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "n_channels": 7,
+  "input_shape": [
+    7,
+    208
+  ],
+  "train_array_path": "/kaggle/input/datasets/taisiyaglazova/ssl-bigp3bci-train-val-subset-100k/X_train.npy",
+  "val_array_path": "/kaggle/input/datasets/taisiyaglazova/ssl-bigp3bci-train-val-subset-100k/X_val.npy",
+  "scale_to_uv": true,
+  "max_epochs": 20,
+  "patience": 15,
+  "min_delta": 0.0001,
+  "mask_ratio": 0.5,
+  "block_size": 16,
+  "checkpoint_every": 5,
+  "best_val_loss": 3.0114417049546094,
+  "completed_epochs": 20
+}

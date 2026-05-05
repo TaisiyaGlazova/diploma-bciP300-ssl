@@ -109,6 +109,7 @@
 * наблюдается плато функции потерь
 
 Обучение остановлено по early stopping на **105-й эпохе**.
+Лучшая **90 эпоха**
 
 ### Reconstruction quality
 
@@ -127,7 +128,7 @@
 * `encoder_last.pt`
 * `checkpoint_best_full.pt` — encoder + decoder
 * `checkpoint_last_full.pt`
-* `encoder_epoch_*.pt` — промежуточные модели
+* `encoder_epoch_*.pt` — промежуточные модели (каждые 10 эпох)
 
 ### Logs
 
